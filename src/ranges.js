@@ -67,6 +67,10 @@ class Ranges {
     contain(point) {
         return this.ranges.some(r => r.contian(point));
     }
+
+    toString() {
+        return `[${this.ranges.reduce((pre, cur) => (typeof pre === 'string' ? pre : pre.toString()) + ', ' + cur.toString() )}]`
+    }
 }
 
 Ranges.convertFromArray = (array) => {

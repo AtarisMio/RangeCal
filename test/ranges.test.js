@@ -154,4 +154,10 @@ describe('Ranges', () => {
             assert.throws(() => Ranges.connect({ a: 1 }), e => e instanceof TypeError);
         });
     });
+    describe('toString', () => {
+        it('[toString] ranges [[0, 5], [7, 9], [11, 12]], should get `[[0, 5], [7, 9], [11, 12]]`', () => {
+            const rs = Ranges.convertFromArray([[0, 5], [7, 9], [11, 12]]);
+            assert(rs.toString() === '[[0, 5], [7, 9], [11, 12]]');
+        });
+    });
 });
