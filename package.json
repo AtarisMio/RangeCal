@@ -1,6 +1,6 @@
 {
   "name": "ranges-calc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a library for calculating ranges",
   "main": "index.js",
   "scripts": {
