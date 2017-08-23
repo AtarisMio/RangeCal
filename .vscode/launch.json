@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/src/range.js",
+            "program": "${workspaceRoot}/src/ranges.js",
             "outFiles": [
                 "${workspaceRoot}/out/**/*.js"
             ]

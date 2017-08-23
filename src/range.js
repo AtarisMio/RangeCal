@@ -38,6 +38,10 @@ class Range {
         }
     }
 
+    get length() {
+        return this.tail - this.head;
+    }
+
     compareWithPoint(point) {
         if (typeof point === 'number') {
             return Range.compareWithPoint(this, point);
@@ -53,12 +57,11 @@ class Range {
     }
 
     compare(pointOrRange) {
-        if (pointOrRange instanceof Range) {
-            return this.compareWithRange(pointOrRange);            
-        } else if (typeof pointOrRange === 'number') {
-            return this.compareWithPoint(pointOrRange);
-        }
-        throw new TypeError('argument not a instance of Range or a number');
+        return Range.compare(this, pointOrRange);
+    }
+
+    contian(point) {
+        return this.compareWithPoint(point) === PandR.IN;
     }
 
     canAdjacent(range) {
@@ -74,49 +77,35 @@ class Range {
         throw new TypeError('argument should be a instance of Range');
     }
 
-    addRange(range) {
+    add(range) {
         switch(this.compareWithRange(range)) {
             case RandR.TOTAL_BEFORE:
-                return this.canAdjacent(range)
-                    ? [new Range(range.head, this.tail)]
-                    : [range, this];
-            case RandR.HEAD_BEFORE:
-                return [new Range(range.head, this.tail)];
-            case RandR.CONTAIN:
-                return [range];
-            case RandR.INNER:
-                return [this];
-            case RandR.TAIL_AFTER:
-                return [new Range(this.head, range.tail)];
-            case RandR.TOTAL_AFTER:
                 return this.canAdjacent(range) ? [new Range(this.head, range.tail)] : [this, range];
+            case RandR.HEAD_BEFORE:
+                return [new Range(this.head, range.tail)];
+            case RandR.CONTAIN:
+                return [this];
+            case RandR.INNER:
+                return [range];
+            case RandR.TAIL_AFTER:
+                return [new Range(range.head, this.tail)];
+            case RandR.TOTAL_AFTER:
+                return this.canAdjacent(range) ? [new Range(range.head, this.tail)] : [range, this];
         }
     }
 
-    subRange(range) {
-        switch(this.compare(range)) {
+    sub(range) {
+        switch(this.compareWithRange(range)) {
             case RandR.TOTAL_BEFORE:
                 return [this];
             case RandR.HEAD_BEFORE:
-                return [new Range(range.tail + 1, this.tail)];
-            case RandR.CONTAIN:
-                return [];
-            case RandR.INNER: {
-                const sameHead = this.head === range.head;
-                const sameTail = this.tail === range.tail;
-                if (sameHead && sameTail) {
-                    return [];
-                }
-                if (sameHead) {
-                    return [new Range(range.tail + 1, this.tail)];
-                }
-                if (sameTail) {
-                    return [new Range(this.head, range.head - 1)];
-                }
-                return [new Range(this.head, range.head - 1), new Range(range.tail + 1, this.tail)];
-            }
-            case RandR.TAIL_AFTER:
                 return [new Range(this.head, range.head -1)];
+            case RandR.CONTAIN:
+                return [new Range(this.head, range.head - 1), new Range(range.tail + 1, this.tail)];
+            case RandR.INNER:
+                return [];
+            case RandR.TAIL_AFTER:
+                return [new Range(range.tail + 1, this.tail)];
             case RandR.TOTAL_AFTER:
                 return [this];
         }
@@ -125,6 +114,25 @@ class Range {
     toString() {
         return `[${this.head}, ${this.tail}]`;
     }
+}
+
+Range.convertFromArray = (array) => {
+    if (!(array instanceof Array) || Number.isNaN(Number(array[0])) || Number.isNaN(Number(array[1])) ) {
+        throw new TypeError('unsatisfied arguments, arguments should be looking like [number, number]');
+    }
+    return new Range(array[0], array[1]);
+}
+
+Range.compare = (range, pointOrRange) => {
+    if (!(range instanceof Range)) {
+        throw new TypeError('range should be a instance of Range');
+    }
+    if (pointOrRange instanceof Range) {
+        return Range.compareWithRange(range, pointOrRange);            
+    } else if (typeof pointOrRange === 'number') {
+        return Range.compareWithPoint(range, pointOrRange);
+    }
+    throw new TypeError('second argument not a instance of Range or a number');
 }
 
 Range.compareWithPoint = (range, point) => {
@@ -147,7 +155,7 @@ Range.compareWithRange = (range1, range2) => {
     if (!(range1 instanceof Range) || !(range2 instanceof Range)) {
         throw new TypeError('arguments should be instances of Range');
     }
-    return RandR_map[range1.compareWithPoint(range2.head)][range1.compareWithPoint(range2.tail)];
+    return RandR_map[range2.compareWithPoint(range1.head)][range2.compareWithPoint(range1.tail)];
 };
 
 exports = module.exports = Range;
