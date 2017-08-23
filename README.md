@@ -1,4 +1,6 @@
-# RangeCal [![Build Status](https://travis-ci.org/AtrisMio/RangeCal.svg?branch=master)](https://travis-ci.org/AtrisMio/RangeCal) [![Coverage Status](https://coveralls.io/repos/github/AtrisMio/RangeCal/badge.svg?branch=master)](https://coveralls.io/github/AtrisMio/RangeCal?branch=master)
+# RangeCal
+
+[![Build Status](https://travis-ci.org/AtrisMio/RangeCal.svg?branch=master)](https://travis-ci.org/AtrisMio/RangeCal) [![Coverage Status](https://coveralls.io/repos/github/AtrisMio/RangeCal/badge.svg?branch=master)](https://coveralls.io/github/AtrisMio/RangeCal?branch=master)
 
 A library for calculating ranges
 
